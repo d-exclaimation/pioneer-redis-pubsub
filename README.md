@@ -10,18 +10,7 @@ This package implements the PubSub protocol from the [Pioneer](https://github.co
 
 ## Usage
 
-Define your GraphQL schema with a Subscription type:
-
-```swift
-let schema = try Schema<Resolver, Context> {
-    Query { ... }
-    Mutation { ... }
-    Subscription {
-        SubscriptionField("somethingChanged", as: Message.self, atSub: Resolver.somethingChanged)
-    }
-}
-```
-Now, let's create a RedisPubSub instance (Here is an example using [Vapor's Redis integration](https://docs.vapor.codes/redis/overview/)):
+Create a RedisPubSub instance (Here is an example using [Vapor's Redis integration](https://docs.vapor.codes/redis/overview/)):
 
 ```swift
 import Vapor
@@ -48,9 +37,12 @@ extension Resolver {
     }
 }
 ```
-> Subscription resolver must a return an instance of the type EventStream from the [GraphQLSwift/GraphQL](https://github.com/GraphQLSwift/GraphQL). Here, we are using [Pioneer](https://github.com/d-exclaimation/pioneer)'s [AsyncEventStream](https://pioneer-graphql.netlify.app/features/async-event-stream/) that can be built from any AsyncSequence (e.g. AsyncStream and AsyncThrowingStream)
 
-Calling the method `asyncStream` of the RedisPubSub instance will send redis a `SUBSCRIBE` message to the topic provided if have not previously subscribed. RedisPubSub manages internally a collection of subscribers (using Actors) which can be individually unsubscribe without having to close all other subcriber of the same topic. Every time the `publish` method is called, RedisPubSub will `PUBLISH` the event over redis which will be picked up by the RedisPubSub if there exist subscriber(s) for that topic.
+Calling the method `asyncStream` of the RedisPubSub instance will send redis a `SUBSCRIBE` message to the topic provided if have not previously subscribed.
+
+RedisPubSub manages internally a collection of subscribers (using Actors) which can be individually unsubscribe without having to close all other subcriber of the same topic. Every time the `publish` method is called, RedisPubSub will `PUBLISH` the event over redis which will be picked up by the RedisPubSub if there exist subscriber(s) for that topic.
+
+Now, call `publish` method whenever you want to push an event to the subscriber(s).
 
 ```swift
 await pubsub.publish(for: SOMETHING_CHANGED_TOPIC, payload: Message(id: "123"))
