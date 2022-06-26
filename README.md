@@ -21,10 +21,12 @@ let schema = try Schema<Resolver, Context> {
     }
 }
 ```
-Now, let's create a RedisPubSub instance from the `app.redis`:
+Now, let's create a RedisPubSub instance (Here is an example using [Vapor's Redis integration](https://docs.vapor.codes/redis/overview/)):
 
-```
+```swift
+import Vapor
 import struct PioneerRedisPubSub.RedisPubSub
+import Redis
 
 let app = try Application(.detect())
 
