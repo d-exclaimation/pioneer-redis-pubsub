@@ -5,7 +5,7 @@ This package implements the PubSub protocol from the [Pioneer](https://github.co
 ## Setup
 
 ```swift
-.package(url: "https://github.com/d-exclaimation/pioneer-redis-pubsub", from: "0.8.2")
+.package(url: "https://github.com/d-exclaimation/pioneer-redis-pubsub", from: "0.1.0")
 ```
 
 ## Usage
