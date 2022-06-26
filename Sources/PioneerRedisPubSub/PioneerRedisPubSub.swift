@@ -60,6 +60,16 @@ public struct RedisPubSub {
             try? await redis.unsubscribe(from: .init(channel)).get()
             await broadcasting[channel]?.close()
         }
+
+        deinit {
+            guard !broadcasting.isEmpty else { return }
+            let unsubscribedChannels = broadcasting.keys
+            Task {
+                for each in unsubscribedChannels {
+                    try await redis.unsubscribe(from: .init(each)).get()
+                }
+            }
+        }
     }
 
     /// The internal dispatcher for Dispatcher
