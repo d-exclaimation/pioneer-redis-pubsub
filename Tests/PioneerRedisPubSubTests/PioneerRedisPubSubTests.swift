@@ -52,6 +52,7 @@ final class PioneerRedisPubSubTests: XCTestCase {
     /// - Should be able to receive data from all AsyncStream with the same trigger
     /// - Should be able to filter published data to only the same type
     /// - Should be able to publish data after the consumers were set up
+    /// - Should be able to close subscribers after the channel has closed
     func testPublishingConsumingAndClosing() async throws {
         let pubsub = RedisPubSub(client)
         let trigger = "initial"
@@ -97,43 +98,6 @@ final class PioneerRedisPubSubTests: XCTestCase {
         task1.cancel()
     }
     
-    // /// AsyncPubSub closing all consumer for a specific trigger
-    // /// - Should close all consumer with the same trigger
-    // /// - Should never receive anything from any consumer
-    // func testClosing() async throws {
-    //     let pubsub = RedisPubSub(client)
-    //     let trigger = "bad"
-    //     let exp0 = XCTestExpectation(description: "Not closed on 1st")
-    //     let exp1 = XCTestExpectation(description: "Not closed on 2nd")
-
-    //     let stream = pubsub.asyncStream(Bool.self, for: trigger)
-    //     let stream1 = pubsub.asyncStream(Bool.self, for: trigger)
-
-
-    //     await pubsub.publish(for: trigger, payload: true)
-
-    //     let task = Task {
-    //         for await _ in stream {
-    //         }
-    //         exp0.fulfill()
-    //     }
-        
-    //     let task1 = Task {
-    //         for await _ in stream1 {
-    //         }
-    //         exp1.fulfill()
-    //     }
-        
-    //     try? await Task.sleep(nanoseconds: 500_000)
-        
-    //     await pubsub.close(for: trigger)
-        
-    //     wait(for: [exp0, exp1], timeout: 2)
-        
-    //     task.cancel()
-    //     task1.cancel()
-    // }
-
     deinit {
         try? eventLoopGroup.syncShutdownGracefully()
     }
