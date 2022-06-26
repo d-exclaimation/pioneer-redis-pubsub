@@ -11,7 +11,7 @@ import class Pioneer.Broadcast
 import protocol RediStack.RedisClient
 
 /// RedisPubSub is a Redis channel backed pubsub structure for managing AsyncStreams in a concurrent safe way utilizing Actors.
-public struct RedisPubSub: Sendable {
+public struct RedisPubSub {
     /// An actor for dispatching Redis channel subscription to multiple broadcasting
     actor Dispatcher {
         /// RedisClient used to create a channel subscription
@@ -40,8 +40,9 @@ public struct RedisPubSub: Sendable {
             if let broadcast = broadcasting[channel] {
                 return broadcast
             }
-            let broadcast = await redis.broadcast(for: .init(channel))
+            let broadcast = Broadcast<Data>()
             broadcasting[channel] = broadcast
+            await redis.broadcast(given: broadcast, for: .init(channel))
             return broadcast
         }
 

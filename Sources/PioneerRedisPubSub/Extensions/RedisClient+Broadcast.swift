@@ -15,8 +15,8 @@ extension RedisClient {
     /// Subscribes the client to the specified Redis channels and publish the messages into a broadcast
     /// - Parameter channel: The name of channels to subscribe to 
     /// - Returns: The broadcast to published the message to
-    public func broadcast(for channel: RedisChannelName) async -> Broadcast<Data> {
-        let broadcast = Broadcast<Data>()
+    @discardableResult
+    public func broadcast(given broadcast: Broadcast<Data> = .init(), for channel: RedisChannelName) async -> Broadcast<Data> {
         do {
             try await subscribe(
                 to: channel, 
