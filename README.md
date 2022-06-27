@@ -26,7 +26,9 @@ struct Resolver {
 }
 ```
 
-Now, implement your subscription resolver function, using the `pubsub.asyncIterator` to map the event you need:
+Now, implement your subscription resolver function, using the `pubsub.asyncStream` and call `.toEventStream()` to convert into an EventStream using [AsyncEventStream](https://pioneer-graphql.netlify.app/features/async-event-stream/)
+
+Internally calling the method `.asyncStream` of the RedisPubSub will send redis a `SUBSCRIBE` message to the topic provided if there hasn't been a subscription for that topic.
 
 ```swift
 let SOMETHING_CHANGED_TOPIC = "something_changed"
@@ -38,7 +40,6 @@ extension Resolver {
 }
 ```
 
-Calling the method `asyncStream` of the RedisPubSub instance will send redis a `SUBSCRIBE` message to the topic provided if have not previously subscribed.
 
 RedisPubSub manages internally a collection of subscribers (using Actors) which can be individually unsubscribe without having to close all other subcriber of the same topic. Every time the `publish` method is called, RedisPubSub will `PUBLISH` the event over redis which will be picked up by the RedisPubSub if there exist subscriber(s) for that topic.
 
