@@ -5,12 +5,19 @@ import Foundation
 @testable import PioneerRedisPubSub
 
 final class PioneerRedisPubSubTests: XCTestCase {
-    private let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 4)
-    private let hostname = ProcessInfo.processInfo.environment["REDIS_HOSTNAME"] ?? "127.0.0.1"
-    private let port = Int(ProcessInfo.processInfo.environment["REDIS_PORT"] ?? "6379") ?? RedisConnection.Configuration.defaultPort
-    private lazy var client = try! RedisConnectionPool(
+    private var eventLoopGroup: EventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 4) 
+    private var client: RedisConnectionPool!
+
+
+    override func setUp() async throws {
+        let hostname = ProcessInfo.processInfo.environment["REDIS_HOSTNAME"] ?? "127.0.0.1"
+        let port = Int(ProcessInfo.processInfo.environment["REDIS_PORT"] ?? "6379") ?? RedisConnection.Configuration.defaultPort
+
+        client = try RedisConnectionPool(
             configuration: .init(
-                initialServerConnectionAddresses: [.makeAddressResolvingHost(hostname, port: port)], 
+                initialServerConnectionAddresses: [
+                    .makeAddressResolvingHost(hostname, port: port)
+                ], 
                 maximumConnectionCount: .maximumActiveConnections(10), 
                 connectionFactoryConfiguration: .init(
                     connectionInitialDatabase: nil,
@@ -25,12 +32,21 @@ final class PioneerRedisPubSubTests: XCTestCase {
             ), 
             boundEventLoop: eventLoopGroup.next()
         )
+    }
+
+    override func tearDown() async throws {
+        let promise = eventLoopGroup.next().makePromise(of: Void.self)
+        client.close(promise: promise)
+        try await promise.futureResult.get()
+    }
 
     func testConfig() async throws {
-        let client = client
         let stream = await client.broadcast(for: "initial").downstream().stream
         let messageReceived0 = XCTestExpectation(description: "Message should be received")
         let closed0 = XCTestExpectation(description: "Channel should be closed")
+
+        let beforeUnsubscribed = try await client.activeChannels().get()
+        XCTAssert(beforeUnsubscribed.contains(.init("initial")))
 
         let task0 = Task {
             for await _ in stream {
@@ -41,10 +57,14 @@ final class PioneerRedisPubSubTests: XCTestCase {
 
         let res = try await client.publish("hello", to: "initial").get()
         XCTAssert(res > 0)
-        try? await Task.sleep(nanoseconds: 500_000)
+        wait(for: [messageReceived0], timeout: 1)
 
-        try await client.unsubscribe(from: "initial").get()
-        wait(for: [messageReceived0, closed0], timeout: 2)
+        try? await client.unsubscribe(from: "initial").get()
+
+        let afterUnsubscribed = try await client.activeChannels().get()
+        XCTAssertFalse(afterUnsubscribed.contains(.init("initial")))
+
+        wait(for: [closed0], timeout: 1)
         task0.cancel()
     }
 
@@ -56,10 +76,10 @@ final class PioneerRedisPubSubTests: XCTestCase {
     func testPublishingConsumingAndClosing() async throws {
         let pubsub = RedisPubSub(client)
         let trigger = "initial"
-        let exp0 = XCTestExpectation()
-        let exp1 = XCTestExpectation()
-        let exp2 = XCTestExpectation()
-        let exp3 = XCTestExpectation()
+        let exp0 = XCTestExpectation(description: "Expected to receive `0` for stream0")
+        let exp1 = XCTestExpectation(description: "Expected to receive `0` for stream1")
+        let exp2 = XCTestExpectation(description: "Expected stream0 to be closed")
+        let exp3 = XCTestExpectation(description: "Expected stream1 to be closed")
         let stream0 = pubsub.asyncStream(Int.self, for: trigger)
         let stream1 = pubsub.asyncStream(Int.self, for: trigger)
         
@@ -67,8 +87,9 @@ final class PioneerRedisPubSubTests: XCTestCase {
             for await each in stream0 {
                 if each == 0 {
                     exp0.fulfill()
+                } else {
+                    break
                 }
-                break
             }
             exp2.fulfill()
         }
@@ -77,8 +98,9 @@ final class PioneerRedisPubSubTests: XCTestCase {
             for await each in stream1 {
                 if each == 0 {
                     exp1.fulfill()
+                } else {
+                    break
                 }
-                break
             }
             exp3.fulfill()
         }
@@ -96,9 +118,5 @@ final class PioneerRedisPubSubTests: XCTestCase {
 
         task.cancel()
         task1.cancel()
-    }
-    
-    deinit {
-        try? eventLoopGroup.syncShutdownGracefully()
     }
 }

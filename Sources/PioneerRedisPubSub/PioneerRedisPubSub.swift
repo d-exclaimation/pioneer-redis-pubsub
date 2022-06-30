@@ -8,6 +8,7 @@
 import Foundation
 import NIOFoundationCompat
 import class Pioneer.Broadcast
+import struct RediStack.RedisChannelName
 import protocol RediStack.RedisClient
 
 /// RedisPubSub is a Redis channel backed pubsub structure for managing AsyncStreams in a concurrent safe way utilizing Actors.
@@ -61,15 +62,6 @@ public struct RedisPubSub {
             await broadcasting[channel]?.close()
         }
 
-        deinit {
-            guard !broadcasting.isEmpty else { return }
-            let unsubscribedChannels = broadcasting.keys
-            Task {
-                for each in unsubscribedChannels {
-                    try await redis.unsubscribe(from: .init(each)).get()
-                }
-            }
-        }
     }
 
     /// The internal dispatcher for Dispatcher
