@@ -1,7 +1,3 @@
-<p align="center">
-    <img src="./logo.png" width="250" />
-</p>
-
 # PioneerRedisPubSub
 
 This package implements the PubSub protocol from the [Pioneer](https://github.com/d-exclaimation/pioneer) package. It allows you to use a Redis-backed Pub/Sub with similar interface as the [AsyncPubSub](https://pioneer-graphql.netlify.app/guides/advanced/subscriptions/#asyncpubsub) and use it for your subscription resolvers.
