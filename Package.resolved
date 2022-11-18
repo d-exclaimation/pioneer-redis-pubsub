@@ -28,21 +28,12 @@
       }
     },
     {
-      "identity" : "dataloader",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/GraphQLSwift/DataLoader.git",
-      "state" : {
-        "revision" : "b235b88da58d733e9c56ca694225e63be447a590",
-        "version" : "2.1.0"
-      }
-    },
-    {
       "identity" : "graphiti",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/GraphQLSwift/Graphiti.git",
       "state" : {
-        "revision" : "7dfde3feede6b13bdec8e610ec99509cc32bd1f8",
-        "version" : "1.0.1"
+        "revision" : "5b15e16bfaa75b56eded4a0bbcb58345b2e66c43",
+        "version" : "1.2.1"
       }
     },
     {
@@ -50,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/GraphQLSwift/GraphQL.git",
       "state" : {
-        "revision" : "283cc4de56b994a00b2724328221b7a1bc846ddc",
-        "version" : "2.2.1"
+        "revision" : "ad4a71514c604de040a53d6ef37b2c18435e825e",
+        "version" : "2.4.3"
       }
     },
     {
@@ -68,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/d-exclaimation/pioneer",
       "state" : {
-        "revision" : "4ad71d9d4239ff556bcb662abbd3393dc5f6ccd8",
-        "version" : "0.8.2"
+        "revision" : "b63739af0e5be9340184c5b18e674a7a8212ec2f",
+        "version" : "1.0.0"
       }
     },
     {
@@ -97,6 +88,15 @@
       "state" : {
         "revision" : "b14b7f4c528c942f121c8b860b9410b2bf57825e",
         "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "swift-atomics",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-atomics.git",
+      "state" : {
+        "revision" : "919eb1d83e02121cdb434c7bfc1f0c66ef17febe",
+        "version" : "1.0.2"
       }
     },
     {
@@ -149,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio.git",
       "state" : {
-        "revision" : "124119f0bb12384cef35aa041d7c3a686108722d",
-        "version" : "2.40.0"
+        "revision" : "edfceecba13d68c1c993382806e72f7e96feaa86",
+        "version" : "2.44.0"
       }
     },
     {
@@ -203,8 +203,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/vapor.git",
       "state" : {
-        "revision" : "12e2e7460ab912b65fb7a0fe47e4f638a7d5e642",
-        "version" : "4.62.0"
+        "revision" : "2d54398d50951f177eb899c05154636e381f3bc6",
+        "version" : "4.67.4"
       }
     },
     {
