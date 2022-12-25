@@ -18,17 +18,8 @@ final class PioneerRedisPubSubTests: XCTestCase {
                 initialServerConnectionAddresses: [
                     .makeAddressResolvingHost(hostname, port: port)
                 ], 
-                maximumConnectionCount: .maximumActiveConnections(10), 
-                connectionFactoryConfiguration: .init(
-                    connectionInitialDatabase: nil,
-                    connectionPassword: nil,
-                    connectionDefaultLogger: .init(label: "TestLogger"),
-                    tcpClient: nil
-                ),
-                minimumConnectionCount: 0,
-                connectionBackoffFactor: 2,
-                initialConnectionBackoffDelay: .milliseconds(0),
-                connectionRetryTimeout: nil
+                connectionCountBehavior: .strict(maximumConnectionCount: 10, minimumConnectionCount: 0),
+                connectionConfiguration: .init(defaultLogger: .init(label: "TestLogger"))
             ), 
             boundEventLoop: eventLoopGroup.next()
         )
@@ -38,34 +29,6 @@ final class PioneerRedisPubSubTests: XCTestCase {
         let promise = eventLoopGroup.next().makePromise(of: Void.self)
         client.close(promise: promise)
         try await promise.futureResult.get()
-    }
-
-    func testConfig() async throws {
-        let stream = await client.broadcast(for: "initial").downstream().stream
-        let messageReceived0 = XCTestExpectation(description: "Message should be received")
-        let closed0 = XCTestExpectation(description: "Channel should be closed")
-
-        let beforeUnsubscribed = try await client.activeChannels().get()
-        XCTAssert(beforeUnsubscribed.contains(.init("initial")))
-
-        let task0 = Task {
-            for await _ in stream {
-                messageReceived0.fulfill()
-            }
-            closed0.fulfill()
-        }
-
-        let res = try await client.publish("hello", to: "initial").get()
-        XCTAssert(res > 0)
-        wait(for: [messageReceived0], timeout: 1)
-
-        try? await client.unsubscribe(from: "initial").get()
-
-        let afterUnsubscribed = try await client.activeChannels().get()
-        XCTAssertFalse(afterUnsubscribed.contains(.init("initial")))
-
-        wait(for: [closed0], timeout: 1)
-        task0.cancel()
     }
 
     /// RedisPubSub getting `AsyncStream` and publishing data
