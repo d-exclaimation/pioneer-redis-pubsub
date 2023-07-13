@@ -66,7 +66,7 @@
     {
       "identity" : "redistack",
       "kind" : "remoteSourceControl",
-      "location" : "https://gitlab.com/mordil/RediStack.git",
+      "location" : "https://github.com/swift-server/RediStack.git",
       "state" : {
         "revision" : "3f7fedb6db5dfcb12bd2263dfaaec108b250ec79",
         "version" : "2.0.0-gamma.1"
