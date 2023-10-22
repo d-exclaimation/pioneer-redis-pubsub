@@ -13,14 +13,27 @@ final class PioneerRedisPubSubTests: XCTestCase {
         let hostname = ProcessInfo.processInfo.environment["REDIS_HOSTNAME"] ?? "127.0.0.1"
         let port = Int(ProcessInfo.processInfo.environment["REDIS_PORT"] ?? "6379") ?? RedisConnection.Configuration.defaultPort
 
+        // For RediStack v2 or higher
+        // client = try RedisConnectionPool(
+        //     configuration: .init(
+        //         initialServerConnectionAddresses: [
+        //             .makeAddressResolvingHost(hostname, port: port)
+        //         ], 
+        //         connectionCountBehavior: .strict(maximumConnectionCount: 10, minimumConnectionCount: 0),
+        //         connectionConfiguration: .init(defaultLogger: .init(label: "TestLogger"))
+        //     ), 
+        //     boundEventLoop: eventLoopGroup.next()
+        // )
+
+
         client = try RedisConnectionPool(
             configuration: .init(
                 initialServerConnectionAddresses: [
                     .makeAddressResolvingHost(hostname, port: port)
                 ], 
-                connectionCountBehavior: .strict(maximumConnectionCount: 10, minimumConnectionCount: 0),
-                connectionConfiguration: .init(defaultLogger: .init(label: "TestLogger"))
-            ), 
+                maximumConnectionCount: .maximumActiveConnections(10), 
+                connectionFactoryConfiguration: .init()
+            ),
             boundEventLoop: eventLoopGroup.next()
         )
     }
@@ -73,11 +86,11 @@ final class PioneerRedisPubSubTests: XCTestCase {
         await pubsub.publish(for: trigger, payload: "invalid")
         await pubsub.publish(for: trigger, payload: 0)
         
-        wait(for: [exp0, exp1], timeout: 2)
+        await fulfillment(of: [exp0, exp1], timeout: 2)
         
         await pubsub.close(for: trigger)
 
-        wait(for: [exp2, exp3], timeout: 1)
+        await fulfillment(of: [exp2, exp3], timeout: 1)
 
         task.cancel()
         task1.cancel()
