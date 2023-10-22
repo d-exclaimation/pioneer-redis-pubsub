@@ -31,7 +31,7 @@ final class PioneerRedisPubSubTests: XCTestCase {
                 initialServerConnectionAddresses: [
                     .makeAddressResolvingHost(hostname, port: port)
                 ], 
-                maximumConnectionCount: .maximumActiveConnections(10), 
+                maximumConnectionCount: .maximumActiveConnections(2), 
                 connectionFactoryConfiguration: .init()
             ),
             boundEventLoop: eventLoopGroup.next()
@@ -44,9 +44,8 @@ final class PioneerRedisPubSubTests: XCTestCase {
         try await promise.futureResult.get()
     }
 
-    /// RedisPubSub getting `AsyncStream` and publishing data
+    /// RedisPubSub getting `AsyncThrowingStream` and publishing data
     /// - Should be able to receive data from all AsyncStream with the same trigger
-    /// - Should be able to filter published data to only the same type
     /// - Should be able to publish data after the consumers were set up
     /// - Should be able to close subscribers after the channel has closed
     func testPublishingConsumingAndClosing() async throws {
@@ -60,7 +59,7 @@ final class PioneerRedisPubSubTests: XCTestCase {
         let stream1 = pubsub.asyncStream(Int.self, for: trigger)
         
         let task = Task {
-            for await each in stream0 {
+            for try await each in stream0 {
                 if each == 0 {
                     exp0.fulfill()
                 } else {
@@ -71,7 +70,7 @@ final class PioneerRedisPubSubTests: XCTestCase {
         }
         
         let task1 = Task {
-            for await each in stream1 {
+            for try await each in stream1 {
                 if each == 0 {
                     exp1.fulfill()
                 } else {
@@ -83,16 +82,45 @@ final class PioneerRedisPubSubTests: XCTestCase {
         
         try? await Task.sleep(nanoseconds: 1_000_000)
         
-        await pubsub.publish(for: trigger, payload: "invalid")
-        await pubsub.publish(for: trigger, payload: 0)
+        try await pubsub.publish(for: trigger, payload: 0)
         
         await fulfillment(of: [exp0, exp1], timeout: 2)
         
-        await pubsub.close(for: trigger)
+        try await pubsub.close(for: trigger)
 
-        await fulfillment(of: [exp2, exp3], timeout: 1)
+        wait(for: [exp2, exp3], timeout: 1)
 
         task.cancel()
         task1.cancel()
+    }
+
+    /// RedisPubSub getting `AsyncThrowingStream` and publishing data
+    /// - Should throw an error when publishing data that cannot be encoded
+    func testPublishingWrongDataType() async throws {
+        let pubsub = RedisPubSub(client)
+        let trigger = "initial"
+        let exp0 = XCTestExpectation(description: "Expected to not receive `\"invalid\"` for stream0")
+        let stream0 = pubsub.asyncStream(Int.self, for: trigger)
+        
+        let task = Task {
+            do {
+                for try await _ in stream0 {
+                    return
+                }
+            } catch {
+                exp0.fulfill()
+            } 
+        }
+        
+ 
+        try? await Task.sleep(nanoseconds: 1_000_000)
+        
+        try await pubsub.publish(for: trigger, payload: "invalid")
+        
+        wait(for: [exp0], timeout: 2)
+        
+        try await pubsub.close(for: trigger)
+
+        task.cancel()
     }
 }

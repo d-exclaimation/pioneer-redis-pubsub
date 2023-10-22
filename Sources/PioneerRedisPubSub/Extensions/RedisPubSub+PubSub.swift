@@ -7,6 +7,7 @@
 
 import Foundation
 import protocol Pioneer.PubSub
+import struct Pioneer.PubSubConversionError
 
 extension RedisPubSub: PubSub {
     /// Returns a new AsyncStream with the correct type and for a specific trigger
@@ -14,13 +15,20 @@ extension RedisPubSub: PubSub {
     ///   - type: DataType of this AsyncStream
     ///   - trigger: The topic string used to differentiate what data should this stream be accepting
     /// - Returns: A Redis-backed subscriber for a specific channel that can be detached and unsubscribed individually 
-    public func asyncStream<DataType: Sendable & Decodable>(_ type: DataType.Type = DataType.self, for trigger: String) -> AsyncStream<DataType> {
-        AsyncStream<DataType> { con in
+    public func asyncStream<DataType: Sendable & Decodable>(_ type: DataType.Type = DataType.self, for trigger: String) -> AsyncThrowingStream<DataType, Error> {
+        AsyncThrowingStream<DataType, Error> { con in
             let task = Task {
-                let broadcast = await dispatcher.downstream(to: trigger)
-                for await data in broadcast {
-                    guard let event = try? JSONDecoder().decode(DataType.self, from: data) else { continue }
-                    con.yield(event)
+                do {
+                    let broadcast = try await dispatcher.downstream(to: trigger)
+                    for try await data in broadcast {
+                        guard let event = try? JSONDecoder().decode(DataType.self, from: data) else { 
+                            con.finish(throwing: PubSubConversionError(reason: "Failed to decode data to \(DataType.self)"))
+                            continue
+                        }
+                        con.yield(event)
+                    }
+                } catch {
+                    con.finish(throwing: error)
                 }
                 con.finish()
             }
@@ -30,12 +38,12 @@ extension RedisPubSub: PubSub {
         }
     }
 
-    public func publish<DataType: Sendable & Encodable>(for trigger: String, payload: DataType) async {
+    public func publish<DataType: Sendable & Encodable>(for trigger: String, payload: DataType) async throws {
         guard let data = try? JSONEncoder().encode(payload) else { return }
-        await dispatcher.publish(for: trigger, data)
+        try await dispatcher.publish(for: trigger, data)
     }
 
-    public func close(for trigger: String) async {
-        await dispatcher.close(for: trigger)
+    public func close(for trigger: String) async throws {
+        try await dispatcher.close(for: trigger)
     }
 }
