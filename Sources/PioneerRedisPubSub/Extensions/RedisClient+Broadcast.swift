@@ -36,7 +36,7 @@ extension RedisClient {
     /// - Parameter channel: The name of channels to subscribe to 
     /// - Returns: The broadcast to published the message to
     @discardableResult
-    public func broadcast(given broadcast: Broadcast<Data> = .init(), for channel: RedisChannelName) async -> Broadcast<Data> {
+    public func broadcast(given broadcast: Broadcast<Data> = .init(), for channel: RedisChannelName) async throws -> Broadcast<Data> {
         do {
             let future = subscribe(
                 to: channel,
@@ -56,6 +56,7 @@ extension RedisClient {
             try await future.get()
         } catch {
             await broadcast.close()
+            throw error
         }
         return broadcast
     }
