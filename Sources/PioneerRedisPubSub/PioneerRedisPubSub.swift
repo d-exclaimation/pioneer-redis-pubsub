@@ -28,8 +28,8 @@ public struct RedisPubSub {
         /// Get the AsyncStream for the specific Redis channel
         /// - Parameter channel: The Redis channel name
         /// - Returns: An AsyncStream **just** for the subscriber
-        internal func downstream(to channel: String) async -> AsyncStream<Data> {
-            let broadcast = await subscribe(to: channel)
+        internal func downstream(to channel: String) async throws -> AsyncThrowingStream<Data, Error> {
+            let broadcast = try await subscribe(to: channel)
             let downstream = await broadcast.downstream()
             return downstream.stream
         }
@@ -37,13 +37,13 @@ public struct RedisPubSub {
         /// Get the appropriate broadcasting for the Redis channel, if hasn't exist yet, create a new one
         /// - Parameter channel: The Redis channel name
         /// - Returns: A broadcast actor for the channel
-        private func subscribe(to channel: String) async -> Broadcast<Data> {
+        private func subscribe(to channel: String) async throws -> Broadcast<Data> {
             if let broadcast = broadcasting[channel] {
                 return broadcast
             }
             let broadcast = Broadcast<Data>()
             broadcasting[channel] = broadcast
-            await redis.broadcast(given: broadcast, for: .init(channel))
+            try await redis.broadcast(given: broadcast, for: .init(channel))
             return broadcast
         }
 
@@ -51,13 +51,13 @@ public struct RedisPubSub {
         /// - Parameters:
         ///   - channel: The Redis channel name
         ///   - value: The data to be published
-        internal func publish(for channel: String, _ value: Data) async {
-            let _ = try? await redis.publish(value, to: .init(channel)).get()
+        internal func publish(for channel: String, _ value: Data) async throws {
+            let _ = try await redis.publish(value, to: .init(channel)).get()
         }
 
         /// Close Redis subscription and unsubscribed all subscriber for the channel
         /// - Parameter channel: The Redis channel name
-        internal func close(for channel: String) async {
+        internal func close(for channel: String) async throws {
             try? await redis.unsubscribe(from: .init(channel)).get()
             await broadcasting[channel]?.close()
         }

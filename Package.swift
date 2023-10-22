@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "PioneerRedisPubSub",
     platforms: [
-        .macOS(.v12)
+        .macOS(.v10_15),
     ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
@@ -17,7 +17,7 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "https://github.com/d-exclaimation/pioneer", from: "1.0.0"),
+        .package(url: "https://github.com/d-exclaimation/pioneer", from: "1.4.0"),
         .package(url: "https://github.com/swift-server/RediStack.git", from: "1.4.1")
     ],
     targets: [

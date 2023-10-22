@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swift-server/async-http-client.git",
       "state" : {
-        "revision" : "794dc9d42720af97cedd395e8cd2add9173ffd9a",
-        "version" : "1.11.1"
+        "revision" : "16f7e62c08c6969899ce6cc277041e868364e5cf",
+        "version" : "1.19.0"
       }
     },
     {
@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/async-kit.git",
       "state" : {
-        "revision" : "017dc7da68c1ec9f0f46fcd1a8002d14a5662732",
-        "version" : "1.12.0"
+        "revision" : "eab9edff78e8ace20bd7cb6e792ab46d54f59ab9",
+        "version" : "1.18.0"
       }
     },
     {
@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/console-kit.git",
       "state" : {
-        "revision" : "c085098102c18ac5b3eac741fd4101868ddb5a2e",
-        "version" : "4.4.1"
+        "revision" : "ccd0773b3ad3c67a19918aaef6903678592bb087",
+        "version" : "4.9.0"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/GraphQLSwift/Graphiti.git",
       "state" : {
-        "revision" : "5b15e16bfaa75b56eded4a0bbcb58345b2e66c43",
-        "version" : "1.2.1"
+        "revision" : "daa556a21b4efae97867eac3f5e4c730f181332a",
+        "version" : "1.11.0"
       }
     },
     {
@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/GraphQLSwift/GraphQL.git",
       "state" : {
-        "revision" : "ad4a71514c604de040a53d6ef37b2c18435e825e",
-        "version" : "2.4.3"
+        "revision" : "0c75bc64434613d15e090593e0eeb180193f2d76",
+        "version" : "2.7.0"
       }
     },
     {
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/multipart-kit.git",
       "state" : {
-        "revision" : "0d55c35e788451ee27222783c7d363cb88092fab",
-        "version" : "4.5.2"
+        "revision" : "1adfd69df2da08f7931d4281b257475e32c96734",
+        "version" : "4.5.4"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/d-exclaimation/pioneer",
       "state" : {
-        "revision" : "b63739af0e5be9340184c5b18e674a7a8212ec2f",
-        "version" : "1.0.0"
+        "revision" : "be1925c2961be6e1d68adbcc16c82818279d6f9b",
+        "version" : "1.4.0"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swift-server/RediStack.git",
       "state" : {
-        "revision" : "43d94452a8be6ebebb07ec7bcf4e6f19888e1251",
-        "version" : "1.4.1"
+        "revision" : "30a43b019569625d2d9972c4fe89e06dbdc09e64",
+        "version" : "1.5.1"
       }
     },
     {
@@ -77,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/routing-kit.git",
       "state" : {
-        "revision" : "9e181d685a3dec1eef1fc6dacf606af364f86d68",
-        "version" : "4.5.0"
+        "revision" : "88077f2c9d12777dcc89562fa581888ff7ba14ae",
+        "version" : "4.8.1"
       }
     },
     {
@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-algorithms.git",
       "state" : {
-        "revision" : "b14b7f4c528c942f121c8b860b9410b2bf57825e",
-        "version" : "1.0.0"
+        "revision" : "bcd4f369ac962bc3e5244c9df778739f8f5bdbf1",
+        "version" : "1.1.0"
       }
     },
     {
@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-atomics.git",
       "state" : {
-        "revision" : "919eb1d83e02121cdb434c7bfc1f0c66ef17febe",
-        "version" : "1.0.2"
+        "revision" : "cd142fd2f64be2100422d658e7411e39489da985",
+        "version" : "1.2.0"
       }
     },
     {
@@ -104,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/swift-server/swift-backtrace.git",
       "state" : {
-        "revision" : "f25620d5d05e2f1ba27154b40cafea2b67566956",
-        "version" : "1.3.3"
+        "revision" : "80746bdd0ac8a7d83aad5d89dac3cbf15de652e6",
+        "version" : "1.3.4"
       }
     },
     {
@@ -113,8 +113,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections",
       "state" : {
-        "revision" : "48254824bb4248676bf7ce56014ff57b142b77eb",
-        "version" : "1.0.2"
+        "revision" : "a902f1823a7ff3c9ab2fba0f992396b948eda307",
+        "version" : "1.0.5"
       }
     },
     {
@@ -122,8 +122,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-crypto.git",
       "state" : {
-        "revision" : "d9825fa541df64b1a7b182178d61b9a82730d01f",
-        "version" : "2.1.0"
+        "revision" : "b51f1d6845b353a2121de1c6a670738ec33561a6",
+        "version" : "3.1.0"
       }
     },
     {
@@ -131,8 +131,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log.git",
       "state" : {
-        "revision" : "5d66f7ba25daf4f94100e7022febf3c75e37a6c7",
-        "version" : "1.4.2"
+        "revision" : "532d8b529501fb73a2455b179e0bbb6d49b652ed",
+        "version" : "1.5.3"
       }
     },
     {
@@ -140,8 +140,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-metrics.git",
       "state" : {
-        "revision" : "1c1408bf8fc21be93713e897d2badf500ea38419",
-        "version" : "2.3.1"
+        "revision" : "971ba26378ab69c43737ee7ba967a896cb74c0d1",
+        "version" : "2.4.1"
       }
     },
     {
@@ -149,8 +149,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio.git",
       "state" : {
-        "revision" : "edfceecba13d68c1c993382806e72f7e96feaa86",
-        "version" : "2.44.0"
+        "revision" : "3db5c4aeee8100d2db6f1eaf3864afdad5dc68fd",
+        "version" : "2.59.0"
       }
     },
     {
@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio-extras.git",
       "state" : {
-        "revision" : "a75e92bde3683241c15df3dd905b7a6dcac4d551",
-        "version" : "1.12.1"
+        "revision" : "fb70a0f5e984f23be48b11b4f1909f3bee016178",
+        "version" : "1.19.1"
       }
     },
     {
@@ -167,8 +167,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio-http2.git",
       "state" : {
-        "revision" : "108ac15087ea9b79abb6f6742699cf31de0e8772",
-        "version" : "1.22.0"
+        "revision" : "9c22e4f810ce780453f563fba98e1a1039f83d56",
+        "version" : "1.28.1"
       }
     },
     {
@@ -176,8 +176,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio-ssl.git",
       "state" : {
-        "revision" : "42436a25ff32c390465567f5c089a9a8ce8d7baf",
-        "version" : "2.20.0"
+        "revision" : "320bd978cceb8e88c125dcbb774943a92f6286e9",
+        "version" : "2.25.0"
       }
     },
     {
@@ -185,8 +185,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio-transport-services.git",
       "state" : {
-        "revision" : "2cb54f91ddafc90832c5fa247faf5798d0a7c204",
-        "version" : "1.13.0"
+        "revision" : "e7403c35ca6bb539a7ca353b91cc2d8ec0362d58",
+        "version" : "1.19.0"
       }
     },
     {
@@ -203,8 +203,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/vapor.git",
       "state" : {
-        "revision" : "2d54398d50951f177eb899c05154636e381f3bc6",
-        "version" : "4.67.4"
+        "revision" : "288d73a368ac0d0e228dd9b81eecc576b50b9d6d",
+        "version" : "4.84.6"
       }
     },
     {
@@ -212,8 +212,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/websocket-kit.git",
       "state" : {
-        "revision" : "09212f4c2b9ebdef00f04b913b57f5d77bc4ea62",
-        "version" : "2.4.1"
+        "revision" : "53fe0639a98903858d0196b699720decb42aee7b",
+        "version" : "2.14.0"
       }
     }
   ],
